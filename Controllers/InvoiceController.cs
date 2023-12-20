@@ -57,7 +57,7 @@ namespace PartyProductWebApi.Controllers
         }
 
         [HttpGet("{partyId}")]
-        public async Task<ActionResult> GetInvoiceList(string partyId, [FromQuery] string? productName = null, [FromQuery] string? date = null)
+        public async Task<ActionResult> GetInvoiceList(int partyId, [FromQuery] string? productName = null, [FromQuery] string? date = null)
         {
             var invoiceList = await _context.InvoiceDTOs
                 .FromSqlRaw("EXEC GetInvoicesByPartyAndProductAndDate @PartyId, @ProductName, @Date",
