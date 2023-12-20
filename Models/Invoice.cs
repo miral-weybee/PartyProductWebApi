@@ -11,13 +11,13 @@ public partial class Invoice
 
     public int Quantity { get; set; }
 
-    public int PartyPartyId { get; set; }
+    public int PartyId { get; set; }
 
-    public int ProductProductId { get; set; }
+    public int ProductId { get; set; }
 
     public DateOnly? Date { get; set; }
 
-    public virtual Party PartyParty { get; set; } = null!;
+    public virtual Party Party { get; set; } = null!;
 
-    public virtual Product ProductProduct { get; set; } = null!;
+    public virtual Product Product { get; set; } = null!;
 }

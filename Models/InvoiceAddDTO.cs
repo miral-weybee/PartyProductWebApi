@@ -5,16 +5,16 @@ namespace PartyProductWebApi.Models
     public class InvoiceAddDTO
     {
         [Required]
-        public int InvoiceId { get; set; }
+        public int id { get; set; }
         [Required]
         public int CurrentRate { get; set; }
         [Required]
         public int Quantity { get; set; }
-        [Required]
-        public int PartyPartyId { get; set; }
-        [Required]
-        public int ProductProductId { get; set; }
-        
+
+        public int PartyId { get; set; }
+
+        public int ProductId { get; set; }
+
         public DateOnly? Date { get; set; }
     }
 }

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using PartyProductWebApi.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PartyProductWebApi.Controllers
 {
@@ -20,18 +19,17 @@ namespace PartyProductWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<InvoiceAddDTO>> SaveInvoice([FromBody] InvoiceAddDTO invoiceAddDTO)
+        public async Task<ActionResult<InvoiceAddDTO>> SaveInvoice([FromBody] InvoiceAddDTO invoiceAdd)
         {
-            if (invoiceAddDTO == null)
+            if (invoiceAdd == null)
                 return BadRequest();
 
             _context.Invoices.Add(new Invoice
             {
-                Id = invoiceAddDTO.InvoiceId,
-                CurrentRate = invoiceAddDTO.CurrentRate,
-                Quantity = invoiceAddDTO.Quantity,
-                PartyPartyId = invoiceAddDTO.PartyPartyId,
-                ProductProductId = invoiceAddDTO.ProductProductId,
+                CurrentRate = invoiceAdd.CurrentRate,
+                Quantity = invoiceAdd.Quantity,
+                PartyId = invoiceAdd.PartyId,
+                ProductId = invoiceAdd.ProductId,
                 Date = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day)
             });
             await _context.SaveChangesAsync();
@@ -39,19 +37,19 @@ namespace PartyProductWebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateInvoice([FromRoute] int id, InvoiceAddDTO invoiceAddDto)
+        public async Task<ActionResult> UpdateInvoice([FromRoute] int id, InvoiceAddDTO invoice)
         {
-            var invoice = _context.Invoices.Where(x => x.Id == id).FirstOrDefault();
-            if (invoice == null)
+            var invoiceFromDb = _context.Invoices.FirstOrDefault(x=> x.Id == id);
+            if (invoiceFromDb == null)
             {
                 return NotFound();
             }
 
-            invoice.CurrentRate = invoiceAddDto.CurrentRate;
-            invoice.Quantity = invoiceAddDto.Quantity;
-            invoice.PartyPartyId = invoiceAddDto.PartyPartyId;
-            invoice.ProductProductId = invoiceAddDto.ProductProductId;
-            invoice.Date = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            invoiceFromDb.CurrentRate = invoice.CurrentRate;
+            invoiceFromDb.Quantity = invoice.Quantity;
+            invoiceFromDb.PartyId = invoice.PartyId;
+            invoiceFromDb.ProductId = invoice.ProductId;
+            invoiceFromDb.Date = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
 
 
             await _context.SaveChangesAsync();
@@ -59,31 +57,30 @@ namespace PartyProductWebApi.Controllers
         }
 
         [HttpGet("{partyId}")]
-        public async Task<ActionResult> GetInvoiceList(int partyId, [FromQuery] string? productName = null, [FromQuery] string? date = null)
+        public async Task<ActionResult> GetInvoiceList(string partyId, [FromQuery] string? productName = null, [FromQuery] string? date = null)
         {
-            //var invoiceList = await _context.Invoices.FromSqlRaw("Exec GetInvoicesByPartyAndProductAndDate " + partyId+ ","+productName+ "," + date).ToListAsync();
-            var invoiceList = await _context.Invoices
+            var invoiceList = await _context.InvoiceDTOs
                 .FromSqlRaw("EXEC GetInvoicesByPartyAndProductAndDate @PartyId, @ProductName, @Date",
                     new SqlParameter("@PartyId", partyId),
                     new SqlParameter("@ProductName", (object)productName ?? DBNull.Value),
                     new SqlParameter("@Date", (object)date ?? DBNull.Value)).ToListAsync();
-            var list = new List<InvoiceGetDTO>();
+
+            var list = new List<InvoiceDTO>();
             foreach (var item in invoiceList)
             {
-                list.Add(new InvoiceGetDTO()
+                list.Add(new InvoiceDTO()
                 {
-                    InvoiceId = item.Id,
+                    Id = item.Id,
                     CurrentRate = item.CurrentRate,
                     Quantity = item.Quantity,
-                    PartyName = _context.Parties.Find(item.PartyPartyId)?.PartyName,
-                    ProductName = _context.Products.Find(item.ProductProductId)?.ProductName,
+                    PartyName = item.PartyName,
+                    ProductName = item.ProductName,
                     Date = item.Date,
                     Total = item.Quantity * item.CurrentRate
                 });
             }
-           
+
             return Ok(list);
         }
-
     }
 }

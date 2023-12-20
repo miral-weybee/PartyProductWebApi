@@ -20,14 +20,14 @@ namespace PartyProductWebApi.Controllers
         public async Task<ActionResult<List<AssignPartyDTO>>> GetAssignPartyList()
         {
             var list = new List<AssignPartyDTO>();
-            var temp = await _context.AssignParties.Include(x => x.PartyParty).Include(x => x.ProductProduct).ToListAsync();
+            var temp = await _context.AssignParties.Include(x => x.Party).Include(x => x.Product).ToListAsync();
             foreach (var item in temp)
             {
                 list.Add(new AssignPartyDTO
                 {
                     AssignPartyId = item.AssignPartyId,
-                    PartyName = item.PartyParty.PartyName,
-                    ProductName = item.ProductProduct.ProductName
+                    PartyName = item.Party.PartyName,
+                    ProductName = item.Product.ProductName
                 });
             }
             return Ok(list);
@@ -41,8 +41,8 @@ namespace PartyProductWebApi.Controllers
 
             _context.AssignParties.Add(new AssignParty()
             {
-                PartyPartyId = assignPartyAddDto.PartyId,
-                ProductProductId = assignPartyAddDto.ProductId
+                PartyId = assignPartyAddDto.PartyId,
+                ProductId = assignPartyAddDto.ProductId
             });
             await _context.SaveChangesAsync();
             return Ok("Assign Party Added Successfully..");
@@ -56,8 +56,8 @@ namespace PartyProductWebApi.Controllers
             {
                 return NotFound();
             }
-            assignparty.PartyPartyId = assignParty.PartyId;
-            assignparty.ProductProductId = assignParty.ProductId;
+            assignparty.PartyId = assignParty.PartyId;
+            assignparty.ProductId = assignParty.ProductId;
 
             await _context.SaveChangesAsync();
             return Ok("Assign Party Updated Successfully..");

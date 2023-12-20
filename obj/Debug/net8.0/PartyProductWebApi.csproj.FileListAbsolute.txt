@@ -138,3 +138,4 @@ C:\Users\DELL\source\repos\PartyProductWebApi\bin\Debug\net8.0\Microsoft.AspNetC
 C:\Users\DELL\source\repos\PartyProductWebApi\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 C:\Users\DELL\source\repos\PartyProductWebApi\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Users\DELL\source\repos\PartyProductWebApi\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
+C:\Users\DELL\source\repos\PartyProductWebApi\obj\Debug\net8.0\PartyProductWebApi.sourcelink.json
