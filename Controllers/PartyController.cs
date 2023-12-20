@@ -47,7 +47,7 @@ namespace PartyProductWebApi.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateParty([FromRoute] int id, PartyDTO partydto)
         {
-            var party = _context.Parties.Where(x => x.PartyId == id).FirstOrDefault();
+            var party = await _context.Parties.Where(x => x.PartyId == id).FirstOrDefaultAsync();
             if (party == null)
             {
                 return NotFound();

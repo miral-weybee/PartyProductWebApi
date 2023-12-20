@@ -30,8 +30,9 @@ namespace PartyProductWebApi.Controllers
                 Quantity = invoiceAdd.Quantity,
                 PartyId = invoiceAdd.PartyId,
                 ProductId = invoiceAdd.ProductId,
-                Date = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day)
-            });
+                Date = !invoiceAdd.Date.HasValue ? new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day) : invoiceAdd.Date
+            }
+        );
             await _context.SaveChangesAsync();
             return Ok("Invoice Added Successfully..");
         }
@@ -39,7 +40,7 @@ namespace PartyProductWebApi.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateInvoice([FromRoute] int id, InvoiceAddDTO invoice)
         {
-            var invoiceFromDb = _context.Invoices.FirstOrDefault(x=> x.Id == id);
+            var invoiceFromDb = _context.Invoices.FirstOrDefault(x => x.Id == id);
             if (invoiceFromDb == null)
             {
                 return NotFound();
@@ -49,7 +50,7 @@ namespace PartyProductWebApi.Controllers
             invoiceFromDb.Quantity = invoice.Quantity;
             invoiceFromDb.PartyId = invoice.PartyId;
             invoiceFromDb.ProductId = invoice.ProductId;
-            invoiceFromDb.Date = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            invoiceFromDb.Date = !invoice.Date.HasValue ? new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day) : invoice.Date;
 
 
             await _context.SaveChangesAsync();
