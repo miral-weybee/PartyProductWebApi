@@ -1,17 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
+using Microsoft.IdentityModel.Tokens;
 using PartyProductWebApi.Models;
 
 namespace PartyProductWebApi.Controllers
 {
     [ApiController]
-    [Route("/Party")]
+    [Route("Party")]
     public class PartyController : ControllerBase
     {
-        private readonly PartyProductWebApiContext _context;
+        private readonly EvaluationTaskDbContext _context;
 
-        public PartyController(PartyProductWebApiContext context)
+        public PartyController(EvaluationTaskDbContext context)
         {
             this._context = context;
             
@@ -33,6 +34,22 @@ namespace PartyProductWebApi.Controllers
             return Ok(list);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<List<PartyDTO>>> GetPartyById(int id)
+        {
+            var temp = await _context.Parties.Where(i => i.PartyId == id).ToListAsync();
+
+            if (temp.IsNullOrEmpty())
+                return NotFound();
+              
+            
+            return Ok(new PartyDTO
+            {
+                PartyId = temp[0].PartyId,
+                PartyName = temp[0].PartyName
+            });
+        }
+
         [HttpPost]
         public async Task<ActionResult<PartyDTO>> SaveParty([FromBody] Party party)
         {
@@ -41,7 +58,7 @@ namespace PartyProductWebApi.Controllers
 
             _context.Parties.Add(party);
             await _context.SaveChangesAsync();
-            return Ok("Party Added Successfully..");
+            return Ok(party);
         }
 
         [HttpPut("{id}")]
@@ -56,7 +73,7 @@ namespace PartyProductWebApi.Controllers
             party.PartyName = partydto.PartyName;
 
             _context.SaveChanges();
-            return Ok("Party Updated Successfully..");
+            return Ok("Party Updated Successfully");
         }
 
         [HttpDelete("{id}")]
@@ -69,7 +86,6 @@ namespace PartyProductWebApi.Controllers
             _context.Parties.Remove(party);
             await _context.SaveChangesAsync();
             return Ok("Party Deleted Successfully..");
-
         }
     }
 }

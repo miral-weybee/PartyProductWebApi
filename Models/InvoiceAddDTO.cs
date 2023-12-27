@@ -1,20 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PartyProductWebApi.Models
+﻿namespace PartyProductWebApi.Models
 {
     public class InvoiceAddDTO
     {
-        [Required]
-        public int id { get; set; }
-        [Required]
-        public int CurrentRate { get; set; }
-        [Required]
-        public int Quantity { get; set; }
-
         public int PartyId { get; set; }
 
-        public int ProductId { get; set; }
+        public DateOnly Date { get; set; } = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
 
-        public DateOnly? Date { get; set; }
+        public List<InvoiceItemDTO> Products { get; set; } = new List<InvoiceItemDTO>();
+    }
+
+    public class InvoiceItemDTO
+    {
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+        public decimal Rate { get; set; }
     }
 }

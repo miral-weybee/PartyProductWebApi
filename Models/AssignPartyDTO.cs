@@ -10,5 +10,9 @@ namespace PartyProductWebApi.Models
         public string PartyName { get; set; }
         [Required]
         public string ProductName { get; set; }
+
+        public int PartyId { get; set; }
+
+        public int ProductId { get; set; }
     }
 }

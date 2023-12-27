@@ -1,17 +1,18 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PartyProductWebApi.Models;
 
 namespace PartyProductWebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/AssignParty")]
     [ApiController]
     public class AssignPartyController : ControllerBase
     {
-        private readonly PartyProductWebApiContext _context;
+        private readonly EvaluationTaskDbContext _context;
 
-        public AssignPartyController(PartyProductWebApiContext context)
+        public AssignPartyController(EvaluationTaskDbContext context)
         {
             this._context = context;
 
@@ -27,10 +28,29 @@ namespace PartyProductWebApi.Controllers
                 {
                     AssignPartyId = item.AssignPartyId,
                     PartyName = item.Party.PartyName,
-                    ProductName = item.Product.ProductName
+                    ProductName = item.Product.ProductName,
+                    PartyId = item.Party.PartyId,
+                    ProductId = item.Product.ProductId
                 });
             }
             return Ok(list);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<List<AssignPartyDTO>>> GetAssignPartyById(int id)
+        {
+            var temp = await _context.AssignParties.Include(x => x.Party).Include(x => x.Product).Where(x => x.AssignPartyId == id).ToListAsync();
+
+            if (temp.IsNullOrEmpty())
+             return NotFound();
+            
+            
+            return Ok(new AssignPartyDTO
+            {
+                AssignPartyId = temp[0].AssignPartyId,
+                PartyName = temp[0].Party.PartyName,
+                ProductName = temp[0].Product.ProductName
+            });
         }
 
         [HttpPost]

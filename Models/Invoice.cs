@@ -5,19 +5,11 @@ namespace PartyProductWebApi.Models;
 
 public partial class Invoice
 {
-    public int Id { get; set; }
-
-    public int CurrentRate { get; set; }
-
-    public int Quantity { get; set; }
+    public int InvoiceId { get; set; }
 
     public int PartyId { get; set; }
 
-    public int ProductId { get; set; }
-
     public DateOnly? Date { get; set; }
 
-    public virtual Party Party { get; set; } = null!;
-
-    public virtual Product Product { get; set; } = null!;
+    public virtual ICollection<Invoiceproduct> Invoiceproducts { get; set; } = new List<Invoiceproduct>();
 }

@@ -1,17 +1,18 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PartyProductWebApi.Models;
 
 namespace PartyProductWebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/ProductRate")]
     [ApiController]
     public class ProductRateController : ControllerBase
     {
-        private readonly PartyProductWebApiContext _context;
+        private readonly EvaluationTaskDbContext _context;
 
-        public ProductRateController(PartyProductWebApiContext context)
+        public ProductRateController(EvaluationTaskDbContext context)
         {
             this._context = context;
 
@@ -34,6 +35,25 @@ namespace PartyProductWebApi.Controllers
                 });
             }
             return Ok(list);
+        }
+
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<List<ProductRateDTO>>> GetProductRateById(int id)
+        {
+            var temp = await _context.ProductRates.Include(x => x.ProductNameProduct).Where(x => x.Id == id).ToListAsync();
+            if (temp.IsNullOrEmpty())
+                return NotFound();
+
+            return Ok(new ProductRateDTO
+            {
+                ProductRateId = temp[0].Id,
+                ProductName = temp[0].ProductNameProduct.ProductName,
+                Rate = temp[0].Rate,
+                DateOfRate = temp[0].DateOfRate
+
+            });
+        
         }
 
         [HttpPost]

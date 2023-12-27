@@ -1,17 +1,18 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PartyProductWebApi.Models;
 
 namespace PartyProductWebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/Product")]
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly PartyProductWebApiContext _context;
+        private readonly EvaluationTaskDbContext _context;
 
-        public ProductController(PartyProductWebApiContext context)
+        public ProductController(EvaluationTaskDbContext context)
         {
             this._context = context;
 
@@ -31,6 +32,20 @@ namespace PartyProductWebApi.Controllers
                 });
             }
             return Ok(list);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<List<ProductDTO>>> GetProductById(int id)
+        {
+            var temp = await _context.Products.Where(i => i.ProductId == id).ToListAsync();
+            if (temp.IsNullOrEmpty())
+                return NotFound();
+
+            return Ok(new ProductDTO
+            {
+                ProductId = temp[0].ProductId,
+                ProductName = temp[0].ProductName
+            });
         }
 
         [HttpPost]
