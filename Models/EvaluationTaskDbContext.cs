@@ -21,6 +21,8 @@ public partial class EvaluationTaskDbContext : DbContext
 
     public virtual DbSet<Invoiceproduct> Invoiceproducts { get; set; }
 
+    public virtual DbSet<Login> Logins { get; set; }
+
     public virtual DbSet<Party> Parties { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
@@ -72,6 +74,17 @@ public partial class EvaluationTaskDbContext : DbContext
             entity.HasOne(d => d.Product).WithMany(p => p.Invoiceproducts)
                 .HasForeignKey(d => d.Productid)
                 .HasConstraintName("FK__invoicepr__produ__46E78A0C");
+        });
+
+        modelBuilder.Entity<Login>(entity =>
+        {
+            entity.HasKey(e => e.Uid).HasName("PK__login__DD7012644D54DEBD");
+
+            entity.ToTable("login");
+
+            entity.Property(e => e.Uid).HasColumnName("uid");
+            entity.Property(e => e.Password).HasColumnName("password");
+            entity.Property(e => e.Username).HasColumnName("username");
         });
 
         modelBuilder.Entity<Party>(entity =>

@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using PartyProductWebApi.Models;
+using System;
 using System.Diagnostics.Metrics;
 
 namespace PartyProductWebApi.Controllers
 {
-    [Route("/Invoice")]
+    [Authorize]
+    [Route("Invoice")]
     [ApiController]
     public class InvoiceController : ControllerBase
     {
@@ -19,35 +22,33 @@ namespace PartyProductWebApi.Controllers
 
         }
 
+
         [HttpPost]
-        public async Task<ActionResult<InvoiceAddDTO>> GenerateInvoice([FromBody] Invoice invoiceAdd)
+        public async Task<ActionResult> Post([FromBody] InvoiceAddDTO invoiceCreate)
         {
-            if (invoiceAdd == null)
-                return BadRequest();
-
-            _context.Invoices.Add(new Invoice
+            var invoice = new Invoice
             {
-                PartyId = invoiceAdd.PartyId,
+                PartyId = invoiceCreate.PartyId,
                 Date = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day)
-            });
-
+            };
+            _context.Invoices.Add(invoice);
             await _context.SaveChangesAsync();
 
-
-            foreach (var item in invoiceAdd.Invoiceproducts)
+            foreach (var item in invoiceCreate.Products)
             {
                 var invoiceIteam = new Invoiceproduct
                 {
-                    Invoiceid = item.Invoiceid,
-                    Productid = item.Productid,
-                    Qty = item.Qty,
-                    Rate = item.Rate
+                    Invoiceid = invoice.InvoiceId,
+                    Productid = item.ProductId,
+                    Rate = (int)item.Rate,
+                    Qty = item.Quantity
                 };
                 _context.Invoiceproducts.Add(invoiceIteam);
             }
-
             await _context.SaveChangesAsync();
-            return Ok(invoiceAdd);
+
+            return Ok(invoice);
+
         }
 
 
@@ -128,8 +129,38 @@ namespace PartyProductWebApi.Controllers
             return Ok("invoice deleted successfully..");
         }
 
+        [HttpPut("edit/{id}")]
+        public async Task<ActionResult> Editinvoice([FromRoute] int id, [FromBody] InvoiceProductEditDTO invoiceproductresponse)
+        {
+            
+            var invoiceproducts = _context.Invoiceproducts.Where(x => x.Invoiceid == id);
+            if (invoiceproducts == null)
+                return NotFound();
+
+            foreach(var item in invoiceproducts)
+            {
+                _context.Invoiceproducts.Remove(item);
+            }
+
+            await _context.SaveChangesAsync();
+
+            foreach (var item in invoiceproductresponse.Products)
+            {
+                var invoiceItem = new Invoiceproduct
+                {
+                    Invoiceid = invoiceproductresponse.InvoiceId,
+                    Productid = item.ProductId,
+                    Rate = (int)item.Rate,
+                    Qty = item.Quantity
+                };
+                _context.Invoiceproducts.Add(invoiceItem);
+            }
+            await _context.SaveChangesAsync();
+            return Ok("invoice edited successfully..");
+        }
+
         [HttpGet("InvoiceProductRate/{Id}")]
-        public async Task<ActionResult<decimal>> GetInvoiceProductRate(int Id)
+        public async Task<ActionResult<int>> GetInvoiceProductRate(int Id)
         {
             var latestRate = await _context.ProductRates
                 .Where(pr => pr.ProductNameProductId == Id)

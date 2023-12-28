@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PartyProductWebApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -10,9 +13,26 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<EvaluationTaskDbContext>(options =>
     options.UseSqlServer("Data Source=.; Initial Catalog=EvaluationTaskDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"));
 
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "https://localhost:7042/", 
+            ValidAudience = "https://localhost:7042/", 
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("partyproductAPIkey1234567890123456"))
+        };
+
+    });
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -21,12 +41,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 app.UseCors(x => x
                     .AllowAnyMethod()
                     .AllowAnyHeader()
-                    .SetIsOriginAllowed(origin => true) // allow any origin
+                    .SetIsOriginAllowed(origin => true)
                     .AllowCredentials());
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

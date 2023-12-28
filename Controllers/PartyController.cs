@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Microsoft.IdentityModel.Tokens;
@@ -6,6 +7,7 @@ using PartyProductWebApi.Models;
 
 namespace PartyProductWebApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("Party")]
     public class PartyController : ControllerBase
