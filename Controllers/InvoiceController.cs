@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using PartyProductWebApi.Models;
-using System;
-using System.Diagnostics.Metrics;
 
 namespace PartyProductWebApi.Controllers
 {
@@ -15,11 +11,10 @@ namespace PartyProductWebApi.Controllers
     public class InvoiceController : ControllerBase
     {
         private readonly EvaluationTaskDbContext _context;
-
+       
         public InvoiceController(EvaluationTaskDbContext context)
         {
             this._context = context;
-
         }
 
 
@@ -76,15 +71,11 @@ namespace PartyProductWebApi.Controllers
             string GetPartyName(int partyId)
             {
                 var party = _context.Parties.FirstOrDefault(p => p.PartyId == partyId);
-                return party?.PartyName ?? "Unknown";
+                return party?.PartyName ?? "N/A";
             }
 
             return Ok(list);
         }
-
-
-
-
 
         [HttpGet("InvoiceProducts/{Id}")]
         public async Task<ActionResult<List<ProductDTO>>> GetProductsForDropdown(int Id)
@@ -113,7 +104,7 @@ namespace PartyProductWebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> deleteinvoice([FromRoute] int id)
+        public async Task<ActionResult> Deleteinvoice([FromRoute] int id)
         {
             var invoice = _context.Invoices.SingleOrDefault(x => x.InvoiceId == id);
             if (invoice == null)
@@ -156,7 +147,7 @@ namespace PartyProductWebApi.Controllers
                 _context.Invoiceproducts.Add(invoiceItem);
             }
             await _context.SaveChangesAsync();
-            return Ok("invoice edited successfully..");
+            return Ok("Invoice edited successfully..");
         }
 
         [HttpGet("InvoiceProductRate/{Id}")]
@@ -200,5 +191,6 @@ namespace PartyProductWebApi.Controllers
             var finalinvoice = await invoiceQuery.FirstOrDefaultAsync();
             return finalinvoice;
         }
+
     }
 }

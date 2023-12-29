@@ -61,6 +61,10 @@ namespace PartyProductWebApi.Controllers
             if (assignPartyAddDto == null)
                 return BadRequest();
 
+            var assignparty = _context.AssignParties.Where(x => x.PartyId == assignPartyAddDto.PartyId && x.ProductId == assignPartyAddDto.ProductId);
+            if(assignparty.Any())
+                return Ok("Already Exists");
+
             _context.AssignParties.Add(new AssignParty()
             {
                 PartyId = assignPartyAddDto.PartyId,

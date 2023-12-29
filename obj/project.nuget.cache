@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "DyrAlftfUAFXyEOeLAx4f2Ts/uM6BaDEp1kxKUwYoRfNLMP8/HHGJGXdG3Z4qMPa/pvjEqsVUkU/woUNGlaBkw==",
+  "dgSpecHash": "CBtlILBVGKXm0ZSJltBKDGuoRYb9JlyCqnI7/lHy6xwzgyECCZVEIaQOf/m+CnD+g7kLbMpu/Gku/A/X7AwrWA==",
   "success": true,
   "projectFilePath": "C:\\Users\\DELL\\source\\repos\\PartyProductWebApi\\PartyProductWebApi.csproj",
   "expectedPackageFiles": [
@@ -51,6 +51,11 @@
     "C:\\Users\\DELL\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\newtonsoft.json.bson\\1.0.2\\newtonsoft.json.bson.1.0.2.nupkg.sha512",
+    "C:\\Users\\DELL\\.nuget\\packages\\pdfsharpcore\\1.1.21\\pdfsharpcore.1.1.21.nupkg.sha512",
+    "C:\\Users\\DELL\\.nuget\\packages\\polybioz.htmlrenderer.pdfsharp.core\\1.0.0\\polybioz.htmlrenderer.pdfsharp.core.1.0.0.nupkg.sha512",
+    "C:\\Users\\DELL\\.nuget\\packages\\sixlabors.core\\1.0.0-beta0008\\sixlabors.core.1.0.0-beta0008.nupkg.sha512",
+    "C:\\Users\\DELL\\.nuget\\packages\\sixlabors.fonts\\1.0.0-beta0009\\sixlabors.fonts.1.0.0-beta0009.nupkg.sha512",
+    "C:\\Users\\DELL\\.nuget\\packages\\sixlabors.imagesharp\\1.0.0-beta0006\\sixlabors.imagesharp.1.0.0-beta0006.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.4.0\\swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.4.0\\swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",

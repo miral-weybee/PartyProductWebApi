@@ -140,3 +140,9 @@ C:\Users\DELL\source\repos\PartyProductWebApi\bin\Debug\net8.0\Newtonsoft.Json.d
 C:\Users\DELL\source\repos\PartyProductWebApi\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
 C:\Users\DELL\source\repos\PartyProductWebApi\obj\Debug\net8.0\PartyProductWebApi.sourcelink.json
 C:\Users\DELL\source\repos\PartyProductWebApi\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\DELL\source\repos\PartyProductWebApi\bin\Debug\net8.0\PdfSharpCore.dll
+C:\Users\DELL\source\repos\PartyProductWebApi\bin\Debug\net8.0\HtmlRenderer.Core.dll
+C:\Users\DELL\source\repos\PartyProductWebApi\bin\Debug\net8.0\HtmlRenderer.PdfSharp.Core.dll
+C:\Users\DELL\source\repos\PartyProductWebApi\bin\Debug\net8.0\SixLabors.Core.dll
+C:\Users\DELL\source\repos\PartyProductWebApi\bin\Debug\net8.0\SixLabors.Fonts.dll
+C:\Users\DELL\source\repos\PartyProductWebApi\bin\Debug\net8.0\SixLabors.ImageSharp.dll
