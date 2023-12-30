@@ -8,7 +8,7 @@ using PartyProductWebApi.Models;
 namespace PartyProductWebApi.Controllers
 {
     [Authorize]
-    [Route("/AssignParty")]
+    [Route("AssignParty")]
     [ApiController]
     public class AssignPartyController : ControllerBase
     {
