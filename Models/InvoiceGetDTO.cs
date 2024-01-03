@@ -1,9 +1,14 @@
-﻿namespace PartyProductWebApi.Models
+﻿
+
+namespace PartyProductWebApi.Models
 {
     public class InvoiceGetDTO
     {
+        
         public int InvoiceId { get; set; }
+
         public int PartyId { get; set; }
+        
         public string PartyName { get; set; }
         public DateOnly Date { get; set; }
         public List<InvoiceProductsDTO> Products { get; set; }

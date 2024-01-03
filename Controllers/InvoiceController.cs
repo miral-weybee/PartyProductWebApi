@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using PartyProductWebApi.Models;
 
+
 namespace PartyProductWebApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("Invoice")]
     [ApiController]
     public class InvoiceController : ControllerBase
@@ -14,7 +16,7 @@ namespace PartyProductWebApi.Controllers
        
         public InvoiceController(EvaluationTaskDbContext context)
         {
-            this._context = context;
+            this._context = context;  
         }
 
 
@@ -46,9 +48,6 @@ namespace PartyProductWebApi.Controllers
 
         }
 
-
-
-
         [HttpGet]
         public async Task<ActionResult<List<InvoiceDTO>>> GetInvoices()
         {
@@ -61,10 +60,8 @@ namespace PartyProductWebApi.Controllers
                 list.Add(new InvoiceDTO()
                 {
                     InvoiceId = item.InvoiceId,
-                    PartyId = item.PartyId,
                     PartyName = GetPartyName(item.PartyId),
                     Date = (DateOnly)item.Date
-
                 });
             }
 
@@ -74,6 +71,28 @@ namespace PartyProductWebApi.Controllers
                 return party?.PartyName ?? "N/A";
             }
 
+            return Ok(list);
+        }
+
+        [HttpGet("date")]
+        public async Task<ActionResult> GetInvoiceListByDate([FromQuery] DateOnly startdate,[FromQuery] DateOnly enddate)
+        {
+            var list = new List<InvoiceDTO>();
+            var result = await _context.Invoices.Where(x => x.Date >= startdate && x.Date <= enddate).ToListAsync();
+            if (!result.Any())
+            {
+                return NotFound();
+            }
+
+            foreach(var item in result)
+            {
+                list.Add(new InvoiceDTO
+                {
+                    InvoiceId = item.InvoiceId,
+                    PartyName = _context.Parties.Find(item.PartyId).PartyName,
+                    Date = (DateOnly)item.Date
+                });
+            }
             return Ok(list);
         }
 
@@ -187,7 +206,6 @@ namespace PartyProductWebApi.Controllers
                                        Total = (int)(item.invoiceproducts.Qty * item.invoiceproducts.Rate)
                                    }).ToList()
                                };
-
             var finalinvoice = await invoiceQuery.FirstOrDefaultAsync();
             return finalinvoice;
         }

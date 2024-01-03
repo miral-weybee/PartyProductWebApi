@@ -13,7 +13,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<EvaluationTaskDbContext>(options =>
     options.UseSqlServer("Data Source=.; Initial Catalog=EvaluationTaskDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"));
 
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
