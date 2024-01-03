@@ -7,7 +7,7 @@ using PartyProductWebApi.Models;
 
 namespace PartyProductWebApi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("Invoice")]
     [ApiController]
     public class InvoiceController : ControllerBase
